@@ -15,16 +15,38 @@ class AuthController {
         user = await User.findOne({ email });
 
         if (!user) {
-          user = await User.create({
-            email,
-            emailOtp: otp,
-            emailOtpExpiry: expiry,
-          });
+          user = new User({ email });
         }
+
+        user.emailOtp = otp;
+        user.emailOtpExpiry = expiry;
+        await user.save();
 
         return response(res, 200, "OTP sent successfully");
       }
-    } catch (error) {}
+
+      if (!phoneNumber || !phoneSuffix) {
+        return response(res, 400, "Phone number and suffix are required");
+      }
+
+      const fullPhoneNumber = `${phoneNumber}${phoneSuffix}`;
+
+      user = await User.findOne({ phoneNumber });
+
+      if (!user) {
+        user = new User({
+          phoneNumber,
+          phoneSuffix,
+        });
+      }
+
+      await user.save();
+
+      return response(res, 200, "OTP sent successfully", user);
+    } catch (error) {
+      console.error(error);
+      return response(res, 500, "Something went wrong");
+    }
   }
 }
 

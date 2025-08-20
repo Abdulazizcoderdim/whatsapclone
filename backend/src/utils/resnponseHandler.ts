@@ -4,7 +4,7 @@ export const response = (
   res: Response,
   statusCode: number,
   message: string,
-  data = null
+  data: any = null
 ) => {
   if (!res) {
     console.error("Response is not defined");
