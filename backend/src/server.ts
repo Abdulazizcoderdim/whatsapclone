@@ -1,6 +1,7 @@
 import authRoute from "@/routes/auth.route";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import { config } from "dotenv";
 import express from "express";
 import { connectDB, disconnectFromDatabase } from "./lib/mongoose";
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 // Middleware
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
