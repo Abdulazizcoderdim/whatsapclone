@@ -1,4 +1,6 @@
 import User from "@/models/user.model";
+import sendOtpToEmail from "@/services/email.service";
+import { sendOtpToPhoneNumber } from "@/services/twillo.service";
 import otpGenerate from "@/utils/otpGenerator";
 import { response } from "@/utils/resnponseHandler";
 import type { Request, Response } from "express";
@@ -22,6 +24,8 @@ class AuthController {
         user.emailOtpExpiry = expiry;
         await user.save();
 
+        await sendOtpToEmail(email, otp);
+
         return response(res, 200, "OTP sent successfully");
       }
 
@@ -40,6 +44,7 @@ class AuthController {
         });
       }
 
+      await sendOtpToPhoneNumber(fullPhoneNumber);
       await user.save();
 
       return response(res, 200, "OTP sent successfully", user);

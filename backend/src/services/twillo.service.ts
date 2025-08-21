@@ -6,7 +6,7 @@ const serviceSid = process.env.TWILLO_SERVICE_CID as string;
 
 const client = twillo(accountSid, authToken);
 
-const sendOtpToPhoneNumber = async (phoneNumber: string) => {
+export const sendOtpToPhoneNumber = async (phoneNumber: string) => {
   try {
     console.log("Sending OTP to phone number", phoneNumber);
     if (!phoneNumber) {
@@ -25,5 +25,22 @@ const sendOtpToPhoneNumber = async (phoneNumber: string) => {
   } catch (error) {
     console.error(error);
     throw new Error("Failed to send OTP to phone number");
+  }
+};
+
+export const verifyOtp = async (phoneNumber: string, otp: string) => {
+  try {
+    const res = await client.verify.v2
+      .services(serviceSid)
+      .verificationChecks.create({
+        to: phoneNumber,
+        code: otp,
+      });
+
+    console.log("this is my otp response", res);
+    return res;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to verify OTP");
   }
 };
