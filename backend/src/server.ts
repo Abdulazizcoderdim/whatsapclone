@@ -1,11 +1,12 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import authRoute from "@/routes/auth.route";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { config } from "dotenv";
 import express from "express";
 import { connectDB, disconnectFromDatabase } from "./lib/mongoose";
-config();
 
 const PORT = process.env.PORT || 5000;
 
@@ -16,6 +17,9 @@ app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// DEV TEST: TLS sertifikat tekshiruvini vaqtincha o'chirish
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 (async () => {
   try {
