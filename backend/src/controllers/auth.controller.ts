@@ -27,6 +27,7 @@ class AuthController {
         await user.save();
 
         await sendOtpToEmail(email, otp);
+        console.log(otp);
 
         return response(res, 200, "OTP sent successfully");
       }
@@ -113,7 +114,29 @@ class AuthController {
       });
 
       return response(res, 200, "OTP verified successfully", { token, user });
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+      return response(res, 500, "Something went wrong");
+    }
+  }
+
+  async updateProfile(req: Request, res: Response) {
+    const { username, agreed, about } = req.body;
+    const userId = req.user?.userId;
+    
+    try {
+      const user = await User.findById(userId);
+
+      const file = req.file;
+
+      if(file){
+        const uploadResult=
+        user?.profilePicture=
+      }
+    } catch (error) {
+      console.error(error);
+      return response(res, 500, "Something went wrong");
+    }
   }
 }
 
